@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mestre de Obras - Construa Seu Império</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a1a;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Header com countdown */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid #333;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: #ff6b35;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: #ccc;
+        }
+
+        .countdown {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .countdown-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 12px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .countdown-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            display: block;
+        }
+
+        .countdown-label {
+            font-size: 10px;
+            color: #ccc;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+            display: flex;
+            align-items: center;
+            padding: 100px 20px 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23333" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.1;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content h1 {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: #ccc;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .hero-cta {
+            background: #ff6b35;
+            color: white;
+            padding: 18px 35px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .hero-cta:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+        }
+
+        .hero-image {
+            position: relative;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 20px;
+            background: linear-gradient(45deg, #ff6b35, #ffa726);
+        }
+
+        .construction-icon {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 107, 53, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Conteúdos Section */
+        .contents {
+            padding: 80px 20px;
+            background: #1a1a1a;
+        }
+
+        .contents-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .contents-header {
+            text-align: left;
+            margin-bottom: 60px;
+        }
+
+        .contents-label {
+            color: #ff6b35;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .contents-title {
+            font-size: 36px;
+            font-weight: 700;
+            line-height: 1.2;
+            color: white;
+            max-width: 600px;
+        }
+
+        .contents-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .content-card {
+            background: #2d2d2d;
+            border: 1px solid #404040;
+            border-radius: 16px;
+            padding: 30px;
+            position: relative;
+        }
+
+        .content-number {
+            position: absolute;
+            top: -15px;
+            left: 30px;
+            width: 40px;
+            height: 40px;
+            background: #ff6b35;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: white;
+        }
+
+        .content-date {
+            color: #ccc;
+            font-size: 12px;
+            margin-bottom: 15px;
+            margin-top: 10px;
+        }
+
+        .content-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .content-list {
+            list-style: none;
+        }
+
+        .content-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .content-list li::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: #ff6b35;
+            border-radius: 50%;
+            margin-top: 8px;
+            flex-shrink: 0;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 80px 20px;
+            background: #1a1a1a;
+            text-align: center;
+        }
+
+        .pricing-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .pricing-header {
+            margin-bottom: 50px;
+        }
+
+        .pricing-subtitle {
+            color: #ff6b35;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .pricing-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .pricing-card {
+            background: #2d2d2d;
+            border: 1px solid #404040;
+            border-radius: 16px;
+            padding: 40px 30px;
+            position: relative;
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -12px;
+            left: 30px;
+            background: #ff6b35;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .pricing-badge.secondary {
+            background: #666;
+        }
+
+        .pricing-icon {
+            width: 60px;
+            height: 60px;
+            background: #ff6b35;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pricing-icon.secondary {
+            background: #666;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin: 20px 0 30px;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            color: #ccc;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .pricing-old {
+            color: #666;
+            text-decoration: line-through;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .pricing-price {
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .pricing-installments {
+            color: #ccc;
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+
+        .pricing-cta {
+            background: #ff6b35;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-cta.secondary {
+            background: #666;
+        }
+
+        .pricing-cta:hover {
+            background: #e55a2b;
+            transform: translateY(-1px);
+        }
+
+        .pricing-discount {
+            color: #4CAF50;
+            font-size: 12px;
+        }
+
+        /* Target Audience */
+        .target {
+            padding: 80px 20px;
+            background: #1a1a1a;
+        }
+
+        .target-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .target-header {
+            margin-bottom: 60px;
+        }
+
+        .target-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .target-subtitle {
+            color: #ccc;
+            font-size: 16px;
+            line-height: 1.6;
+            max-width: 800px;
+        }
+
+        .target-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+        }
+
+        .target-card {
+            display: flex;
+            gap: 20px;
+        }
+
+        .target-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .target-content h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .target-content p {
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Mentor Section */
+        .mentor {
+            padding: 80px 20px;
+            background: #1a1a1a;
+        }
+
+        .mentor-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .mentor-image {
+            position: relative;
+        }
+
+        .mentor-image img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 16px;
+        }
+
+        .mentor-bg-text {
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            font-size: 120px;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.05);
+            z-index: 1;
+            line-height: 1;
+        }
+
+        .mentor-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .mentor-label {
+            color: #ff6b35;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .mentor-name {
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .mentor-bio {
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        /* Form Section */
+        .form-section {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .form-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .form-subtitle {
+            color: #ccc;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .qualification-form {
+            background: #2d2d2d;
+            border: 1px solid #404040;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: white;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: #1a1a1a;
+            border: 1px solid #404040;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .form-submit {
+            background: #ff6b35;
+            color: white;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .form-submit:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content h1 {
+                font-size: 36px;
+            }
+
+            .contents-grid,
+            .pricing-grid,
+            .target-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mentor-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .countdown {
+                gap: 8px;
+            }
+
+            .countdown-number {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header com Countdown -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">🏗️</div>
+            <div>
+                <div class="logo-text">MESTRE DE OBRAS</div>
+            </div>
+        </div>
+        <div class="countdown">
+            <div class="countdown-item">
+                <span class="countdown-number" id="days">16</span>
+                <span class="countdown-label">DIAS</span>
+            </div>
+            <div class="countdown-item">
+                <span class="countdown-number" id="hours">05</span>
+                <span class="countdown-label">HORAS</span>
+            </div>
+            <div class="countdown-item">
+                <span class="countdown-number" id="minutes">34</span>
+                <span class="countdown-label">MINUTOS</span>
+            </div>
+            <div class="countdown-item">
+                <span class="countdown-number" id="seconds">14</span>
+                <span class="countdown-label">SEGUNDOS</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Construiu sua construtora. Agora é hora de construir faturamento.</h1>
+                <p class="hero-subtitle">Em 2 dias você vai sair do operacional da sua construtora, fechar contratos maiores e transformar execução em lucro previsível.</p>
+                <a href="#form" class="hero-cta">
+                    Quero garantir minha vaga
+                    <span>→</span>
+                </a>
+            </div>
+            <div class="hero-image">
+                <img src="/placeholder.svg?height=500&width=400" alt="Empresário da construção civil">
+                <div class="construction-icon">
+                    ⛑️
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conteúdos -->
+    <section class="contents">
+        <div class="contents-container">
+            <div class="contents-header">
+                <span class="contents-label">CONTEÚDOS</span>
+                <h2 class="contents-title">Os conteúdos nessa imersão que vão transformar o seu negócio nessa imersão.</h2>
+            </div>
+            <div class="contents-grid">
+                <div class="content-card">
+                    <div class="content-number">01</div>
+                    <div class="content-date">21/06</div>
+                    <h3>Reposicionamento e vendas</h3>
+                    <ul class="content-list">
+                        <li>Como diferenciar sua construtora e fugir de briga por preço.</li>
+                        <li>Estratégias para atrair contratos maiores e melhores.</li>
+                        <li>Como vender sem depender só do indicação.</li>
+                    </ul>
+                </div>
+                <div class="content-card">
+                    <div class="content-number">02</div>
+                    <div class="content-date">21/06</div>
+                    <h3>Precificação e margem</h3>
+                    <ul class="content-list">
+                        <li>Formar preço com base em valor, não só em custo.</li>
+                        <li>Aumentar margem interno sem aumentar o número de obras.</li>
+                    </ul>
+                </div>
+                <div class="content-card">
+                    <div class="content-number">03</div>
+                    <div class="content-date">22/06</div>
+                    <h3>Processos para sair do operacional</h3>
+                    <ul class="content-list">
+                        <li>Estruturar equipe e processos para a empresa rodar sem você em obra.</li>
+                        <li>Liderar como dono, não como funcionário do próprio negócio</li>
+                    </ul>
+                </div>
+                <div class="content-card">
+                    <div class="content-number">04</div>
+                    <div class="content-date">22/06</div>
+                    <h3>Mentalidade do empresário</h3>
+                    <ul class="content-list">
+                        <li>Pensar e agir como CEO, não só como engenheiro técnico</li>
+                        <li>Traçar um plano de ação para crescer com liberdade e escala.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing">
+        <div class="pricing-container">
+            <div class="pricing-header">
+                <div class="pricing-subtitle">SEU PRÓXIMO PASSO</div>
+                <h2 class="pricing-title">Qual o investimento para a imersão?</h2>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-badge">LOTE 01</div>
+                    <div class="pricing-icon">🏗️</div>
+                    <div class="pricing-old">De R$ 2.497 por</div>
+                    <div class="pricing-price">R$ 1.497</div>
+                    <div class="pricing-installments">à vista</div>
+                    <ul class="pricing-features">
+                        <li>2 dias ao vivo (16h totais)</li>
+                        <li>Material digital exclusivo</li>
+                        <li>Acesso à gravação por 30 dias</li>
+                        <li>Certificado digital</li>
+                        <li>12 Meses de acesso à gravação</li>
+                        <li>Grupos exclusivo</li>
+                    </ul>
+                    <button class="pricing-cta">Quero garantir minha vaga</button>
+                    <div class="pricing-discount">27% de desconto (11 vendidos)</div>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-badge secondary">LOTE 02</div>
+                    <div class="pricing-icon secondary">🏗️</div>
+                    <div class="pricing-old">De R$ 3.497 por</div>
+                    <div class="pricing-price">R$ 2.497</div>
+                    <div class="pricing-installments">à vista</div>
+                    <ul class="pricing-features">
+                        <li>2 dias ao vivo (16h totais)</li>
+                        <li>Material digital exclusivo</li>
+                        <li>Acesso à gravação por 30 dias</li>
+                        <li>Certificado digital</li>
+                        <li>12 Meses de acesso à gravação</li>
+                        <li>Grupos exclusivo</li>
+                    </ul>
+                    <button class="pricing-cta secondary">Quero garantir minha vaga</button>
+                    <div class="pricing-discount">0% de desconto (52 vendidos)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Target Audience -->
+    <section class="target">
+        <div class="target-container">
+            <div class="target-header">
+                <h2 class="target-title">Para quem é essa imersão</h2>
+                <p class="target-subtitle">Essa imersão não é para quem quer aprender a "fazer mais concreto" ou "desenhar plantas melhores". É para engenheiros e sócios de construtoras que já estão no jogo mas perceberam que só técnica não paga a conta.</p>
+            </div>
+            <div class="target-grid">
+                <div class="target-card">
+                    <div class="target-icon">🏗️</div>
+                    <div class="target-content">
+                        <h3>Donos que querem sair do canteiro e virar CEOs</h3>
+                        <p>Construiu uma construtora, mas continua escravo da operação, resolvendo tudo e quer finalmente ocupar o lugar de estrategista. Líder e dono.</p>
+                    </div>
+                </div>
+                <div class="target-card">
+                    <div class="target-icon">🏗️</div>
+                    <div class="target-content">
+                        <h3>Construtoras que vendem só por preço ou indicação</h3>
+                        <p>Sabe que pode fechar contratos maiores, mas vive na briga pelo preço ou esperando indicações e quer aprender a vender para clientes melhores.</p>
+                    </div>
+                </div>
+                <div class="target-card">
+                    <div class="target-icon">🏗️</div>
+                    <div class="target-content">
+                        <h3>Empresários que faturam bem, mas lucram pouco</h3>
+                        <p>Roda obra, paga equipe, gira caixa, mas vê pouco resultado no fim do mês e quer transformar volume de serviço em margem real e previsível.</p>
+                    </div>
+                </div>
+                <div class="target-card">
+                    <div class="target-icon">🏗️</div>
+                    <div class="target-content">
+                        <h3>Engenheiro que construiu empresa, mas o negócio não funciona sem ele.</h3>
+                        <p>Para quem já não é mais funcionário, mas ainda não virou dono de verdade e quer ter liberdade para crescer sem ficar refém da rotina.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mentor -->
+    <section class="mentor">
+        <div class="mentor-container">
+            <div class="mentor-image">
+                <div class="mentor-bg-text">MENTOR</div>
+                <img src="/placeholder.svg?height=400&width=300" alt="Rafael Tavares">
+            </div>
+            <div class="mentor-content">
+                <div class="mentor-label">ENGENHEIRO</div>
+                <h2 class="mentor-name">Rafael Tavares</h2>
+                <p class="mentor-bio">Fundador do método "Construtora Lucrativa". Com 14 anos de mercado, saiu do canteiro de obras para se tornar CEO da própria construtora, fechando contratos maiores, aumentando margens e operando tempo da equipe.</p>
+                <p class="mentor-bio">Hoje, ensina engenheiros empreendedores a fazer o mesmo: construir empresas mais lucrativas, previsíveis e livres.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Form Section -->
+    <section class="form-section" id="form">
+        <div class="form-container">
+            <h2 class="form-title">Garanta Sua Vaga Agora</h2>
+            <p class="form-subtitle">Preencha o formulário abaixo para se qualificar e garantir sua participação na imersão que vai transformar sua construtora.</p>
+            
+            <form class="qualification-form" id="leadForm">
+                <div class="form-group">
+                    <label for="name">Nome Completo *</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">E-mail *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">WhatsApp *</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="company">Nome da Empresa</label>
+                    <input type="text" id="company" name="company">
+                </div>
+                
+                <div class="form-group">
+                    <label for="position">Qual seu cargo na empresa? *</label>
+                    <select id="position" name="position" required>
+                        <option value="">Selecione...</option>
+                        <option value="dono">Dono/Sócio</option>
+                        <option value="diretor">Diretor</option>
+                        <option value="gerente">Gerente</option>
+                        <option value="engenheiro">Engenheiro</option>
+                        <option value="outro">Outro</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="revenue">Faturamento mensal aproximado *</label>
+                    <select id="revenue" name="revenue" required>
+                        <option value="">Selecione...</option>
+                        <option value="ate-50k">Até R$ 50.000</option>
+                        <option value="50k-100k">R$ 50.000 - R$ 100.000</option>
+                        <option value="100k-300k">R$ 100.000 - R$ 300.000</option>
+                        <option value="300k-500k">R$ 300.000 - R$ 500.000</option>
+                        <option value="acima-500k">Acima de R$ 500.000</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="employees">Quantos funcionários tem a empresa?</label>
+                    <select id="employees" name="employees">
+                        <option value="">Selecione...</option>
+                        <option value="1-5">1 a 5</option>
+                        <option value="6-15">6 a 15</option>
+                        <option value="16-30">16 a 30</option>
+                        <option value="31-50">31 a 50</option>
+                        <option value="acima-50">Acima de 50</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="challenge">Qual seu maior desafio hoje na construtora? *</label>
+                    <textarea id="challenge" name="challenge" rows="4" required placeholder="Descreva brevemente qual é o principal obstáculo que você enfrenta..."></textarea>
+                </div>
+                
+                <button type="submit" class="form-submit">GARANTIR MINHA VAGA AGORA</button>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        // Countdown Timer
+        function updateCountdown() {
+            const targetDate = new Date();
+            targetDate.setDate(targetDate.getDate() + 16);
+            targetDate.setHours(5, 34, 14, 0);
+            
+            const now = new Date().getTime();
+            const distance = targetDate.getTime() - now;
+            
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+        
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Form Submission
+        document.getElementById('leadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Here you would typically send the data to your server
+            console.log('Lead data:', data);
+            
+            // Show success message
+            alert('Obrigado! Sua inscrição foi recebida. Em breve entraremos em contato.');
+            
+            // Reset form
+            this.reset();
+        });
+
+        // Smooth scroll for CTA buttons
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
